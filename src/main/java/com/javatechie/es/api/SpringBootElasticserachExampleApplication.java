@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ase.service.UserService;
 import com.javatechie.es.api.model.Article;
-
+import com.javatechie.es.api.model.User;
 import com.javatechie.es.api.repository.CustomerRepository;
+import com.javatechie.es.api.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +27,31 @@ import lombok.RequiredArgsConstructor;
 public class SpringBootElasticserachExampleApplication {
 	
 	@Autowired
+	UserRepository userRepository;
+    
+    @PostMapping("/saveUser")
+	public String saveUser(@RequestBody User user) {
+		
+    	userRepository.save(user);
+		
+		return "User registered successfully";
+	}
+
+	@PostMapping("/user")
+	public String loginUser(@RequestBody User user) {
+
+		User userObj = userRepository.findByUsername(user.getUsername());
+       System.out.println(userObj.getUsername());
+		if (user != null && !userObj.getUsername().equalsIgnoreCase(user.getUsername())) {
+			return "User not Found";
+		} else if (!userObj.getPassword().equalsIgnoreCase(user.getPassword())) {
+			return "Password is incorrect";
+		}
+
+		return "success";
+	}
+    
+    @Autowired
 	private CustomerRepository repository;
 	
 	@PostMapping("/saveArticle")
