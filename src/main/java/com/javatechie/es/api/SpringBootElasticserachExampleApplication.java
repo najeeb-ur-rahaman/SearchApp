@@ -1,7 +1,13 @@
 package com.javatechie.es.api;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ase.service.UserService;
+
 import com.javatechie.es.api.model.Article;
 import com.javatechie.es.api.model.User;
 import com.javatechie.es.api.repository.CustomerRepository;
@@ -41,6 +47,9 @@ public class SpringBootElasticserachExampleApplication {
 	public String loginUser(@RequestBody User user) {
 
 		User userObj = userRepository.findByUsername(user.getUsername());
+		if(userObj==null) {
+			return "User not Found";
+		}
        System.out.println(userObj.getUsername());
 		if (user != null && !userObj.getUsername().equalsIgnoreCase(user.getUsername())) {
 			return "User not Found";
@@ -74,8 +83,35 @@ public class SpringBootElasticserachExampleApplication {
 		System.out.println(articles);
 		return articles;
 	}
+	
+	 public static void getPageLinks(String URL, int depth) {
+		 final int MAX_DEPTH = 2;
+		 HashSet<String> links=new HashSet<String>();
+;	        if ((!links.contains(URL) && (depth < MAX_DEPTH))) {
+	            System.out.println(">> Depth: " + depth + " [" + URL + "]");
+	            try {
+	                links.add(URL);
+
+	                Document document = Jsoup.connect(URL).get();
+	                Elements linksOnPage = document.select("a[href]");
+
+	                depth++;
+	                for (Element page : linksOnPage) {
+	                    getPageLinks(page.attr("abs:href"), depth);
+	                }
+	            } catch (IOException e) {
+	                System.err.println("For '" + URL + "': " + e.getMessage());
+	            }
+	        }
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootElasticserachExampleApplication.class, args);
+		
+		  
+		  
+		  getPageLinks("https://google.com/search?q='angular'",0);
+
+		   
 	}
 }
