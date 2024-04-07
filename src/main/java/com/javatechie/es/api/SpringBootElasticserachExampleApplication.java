@@ -1,8 +1,10 @@
 package com.javatechie.es.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -87,7 +89,7 @@ public class SpringBootElasticserachExampleApplication {
 	 public static void getPageLinks(String URL, int depth) {
 		 final int MAX_DEPTH = 2;
 		 HashSet<String> links=new HashSet<String>();
-;	        if ((!links.contains(URL) && (depth < MAX_DEPTH))) {
+	        if ((!links.contains(URL) && (depth < MAX_DEPTH))) {
 	            System.out.println(">> Depth: " + depth + " [" + URL + "]");
 	            try {
 	                links.add(URL);
@@ -104,13 +106,51 @@ public class SpringBootElasticserachExampleApplication {
 	            }
 	        }
     }
+	 
+	 @GetMapping("/search/{keyword}")
+	 Set<String> getUrls(@PathVariable String keyword){
+		  String URL="https://google.com/search" +"?q=" +keyword;
+		  Set<String> urls=new HashSet();
+		  Set<String> s=new HashSet();
+		 try {
+			Document document = Jsoup.connect(URL).get();
+			 String html=   document.html();
+	           Elements links=  document.select("cite");
+	           
+	           for(Element l:links) {
+	        	   String text=l.text();
+	        	   if(text.contains(",")) {
+	        		   text=text.replaceAll(" , ", "/");
+	        		
+	        	   }
+	        	   //System.out.println(text);
+	        	   urls.add(text);
+	        	  
+	       		urls.forEach(e-> {
+	       			if(e.startsWith("https")) {
+	       			int index=	e.indexOf("com");
+	       			String text1= e.substring(0,index+3);
+	       			System.out.println(text1);
+	       			s.add(text1);
+	       			}
+	       		});
+	           }
+	           
+	          
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return s;
+		 
+	 }
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootElasticserachExampleApplication.class, args);
 		
 		  
 		  
-		  getPageLinks("https://google.com/search?q='angular'",0);
+		 // getPageLinks("https://google.com/search?q='angular'",0);
 
 		   
 	}
