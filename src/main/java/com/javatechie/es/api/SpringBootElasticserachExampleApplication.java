@@ -37,11 +37,20 @@ public class SpringBootElasticserachExampleApplication {
 	@Autowired
 	UserRepository userRepository;
     
-    @PostMapping("/saveUser")
+	@PostMapping("/saveUser")
 	public String saveUser(@RequestBody User user) {
-		
-    	userRepository.save(user);
-		
+		String message = "";
+		try {
+			userRepository.save(user);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			message = e.getMessage();
+			if (message.contains("already exist")) {
+				message = user.getUsername() + " " + "already exist";
+				return message;
+			}
+		}
+
 		return "User registered successfully";
 	}
 
@@ -107,43 +116,43 @@ public class SpringBootElasticserachExampleApplication {
 	        }
     }
 	 
-	 @GetMapping("/search/{keyword}")
-	 Set<String> getUrls(@PathVariable String keyword){
-		  String URL="https://google.com/search" +"?q=" +keyword;
-		  Set<String> urls=new HashSet();
-		  Set<String> s=new HashSet();
-		 try {
+	@GetMapping("/search/{keyword}")
+	Set<String> getUrls(@PathVariable String keyword) {
+		// String URL="https://google.com/search" +"?q=" +keyword;
+		String URL = "https://serpapi.com/search?engine=google_scholar" + "&q=" + keyword;
+		Set<String> urls = new HashSet();
+		Set<String> s = new HashSet();
+		try {
 			Document document = Jsoup.connect(URL).get();
-			 String html=   document.html();
-	           Elements links=  document.select("cite");
-	           
-	           for(Element l:links) {
-	        	   String text=l.text();
-	        	   if(text.contains(",")) {
-	        		   text=text.replaceAll(" , ", "/");
-	        		
-	        	   }
-	        	   //System.out.println(text);
-	        	   urls.add(text);
-	        	  
-	       		urls.forEach(e-> {
-	       			if(e.startsWith("https")) {
-	       			int index=	e.indexOf("com");
-	       			String text1= e.substring(0,index+3);
-	       			System.out.println(text1);
-	       			s.add(text1);
-	       			}
-	       		});
-	           }
-	           
-	          
+			String html = document.html();
+			Elements links = document.select("cite");
+
+			for (Element l : links) {
+				String text = l.text();
+				if (text.contains(",")) {
+					text = text.replaceAll(" , ", "/");
+
+				}
+				// System.out.println(text);
+				urls.add(text);
+
+				urls.forEach(e -> {
+					if (e.startsWith("https")) {
+						int index = e.indexOf("com");
+						String text1 = e.substring(0, index + 3);
+						System.out.println(text1);
+						s.add(text1);
+					}
+				});
+			}
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return s;
-		 
-	 }
+
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootElasticserachExampleApplication.class, args);
