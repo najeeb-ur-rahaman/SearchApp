@@ -1,7 +1,6 @@
 package com.javatechie.es.api;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -90,7 +89,6 @@ public class SpringBootElasticserachExampleApplication {
 	public List<Article> findByFirstName(@PathVariable String title) {
 		System.out.println("title=" + title);
 		List<Article> articles = repository.findByTitle(title);
-
 		System.out.println(articles);
 		return articles;
 	}
@@ -118,8 +116,8 @@ public class SpringBootElasticserachExampleApplication {
 	 
 	@GetMapping("/search/{keyword}")
 	Set<String> getUrls(@PathVariable String keyword) {
-		// String URL="https://google.com/search" +"?q=" +keyword;
-		String URL = "https://serpapi.com/search?engine=google_scholar" + "&q=" + keyword;
+		 String URL="https://google.com/search" +"?q=" +keyword;
+		//String URL = "https://scholar.google.com/scholar?hl=en&q="+keyword;
 		Set<String> urls = new HashSet();
 		Set<String> s = new HashSet();
 		try {
@@ -129,18 +127,39 @@ public class SpringBootElasticserachExampleApplication {
 
 			for (Element l : links) {
 				String text = l.text();
+				String data=l.tagName();
 				if (text.contains(",")) {
 					text = text.replaceAll(" , ", "/");
 
 				}
-				// System.out.println(text);
+				 System.out.println(text);
 				urls.add(text);
+				
 
 				urls.forEach(e -> {
 					if (e.startsWith("https")) {
-						int index = e.indexOf("com");
-						String text1 = e.substring(0, index + 3);
-						System.out.println(text1);
+						int index = e.indexOf(".com");
+						String text1 = e.substring(0, index + 4);
+						//System.out.println(text1);
+						if(text1.contains(".com"))
+						s.add(text1);
+					}
+				});
+				urls.forEach(e -> {
+					if (e.startsWith("https")) {
+						int index = e.indexOf(".dev");
+						String text1 = e.substring(0, index + 4);
+						//System.out.println(text1);
+						if(text1.contains("dev"))
+						s.add(text1);
+					}
+				});
+				urls.forEach(e -> {
+					if (e.startsWith("https")) {
+						int index = e.indexOf(".org");
+						String text1 = e.substring(0, index + 4);
+						//System.out.println(text1);
+						if(text1.contains(".org"))
 						s.add(text1);
 					}
 				});
