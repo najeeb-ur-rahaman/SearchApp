@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.catalina.connector.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -115,12 +116,14 @@ public class SpringBootElasticserachExampleApplication {
     }
 	 
 	@GetMapping("/search/{keyword}")
-	Set<String> getUrls(@PathVariable String keyword) {
+	com.javatechie.es.api.model.Response getUrls(@PathVariable String keyword) {
 		 String URL="https://google.com/search" +"?q=" +keyword;
 		//String URL = "https://scholar.google.com/scholar?hl=en&q="+keyword;
-		Set<String> urls = new HashSet();
-		Set<String> s = new HashSet();
+		
+		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
 		try {
+			Set<String> urls = new HashSet();
+			Set<String> s = new HashSet();
 			Document document = Jsoup.connect(URL).get();
 			String html = document.html();
 			Elements links = document.select("cite");
@@ -164,12 +167,17 @@ public class SpringBootElasticserachExampleApplication {
 					}
 				});
 			}
+			response.setResults(s);
+			response.setInput(keyword);
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return s;
+		
+		
+		return response;
 
 	}
 
