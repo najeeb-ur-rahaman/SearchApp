@@ -1,11 +1,14 @@
 package com.javatechie.es.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.catalina.connector.Response;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 
 import com.javatechie.es.api.model.Article;
@@ -36,6 +40,9 @@ public class SpringBootElasticserachExampleApplication {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+//	@Autowired
+//	RestTemplate template;
     
 	@PostMapping("/saveUser")
 	public String saveUser(@RequestBody User user) {
@@ -116,68 +123,115 @@ public class SpringBootElasticserachExampleApplication {
     }
 	 
 	@GetMapping("/search/{keyword}")
-	com.javatechie.es.api.model.Response getUrls(@PathVariable String keyword) {
-		 String URL="https://google.com/search" +"?q=" +keyword;
-		//String URL = "https://scholar.google.com/scholar?hl=en&q="+keyword;
+	String getUrls(@PathVariable String keyword) throws IOException {
+		// String URL="https://google.com/search" +"?q=" +keyword;
+		String en="en";
+		String key="139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0";
+		
+		//String URL = "https://scholar.google.com/scholar?hl={en}&api_key={key}&q={keyword}";
+		
+		String URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +keyword;
 		
 		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
-		try {
-			Set<String> urls = new HashSet();
-			Set<String> s = new HashSet();
-			Document document = Jsoup.connect(URL).get();
-			String html = document.html();
-			Elements links = document.select("cite");
-
-			for (Element l : links) {
-				String text = l.text();
-				String data=l.tagName();
-				if (text.contains(",")) {
-					text = text.replaceAll(" , ", "/");
-
-				}
-				 System.out.println(text);
-				urls.add(text);
-				
-
-				urls.forEach(e -> {
-					if (e.startsWith("https")) {
-						int index = e.indexOf(".com");
-						String text1 = e.substring(0, index + 4);
-						//System.out.println(text1);
-						if(text1.contains(".com"))
-						s.add(text1);
-					}
-				});
-				urls.forEach(e -> {
-					if (e.startsWith("https")) {
-						int index = e.indexOf(".dev");
-						String text1 = e.substring(0, index + 4);
-						//System.out.println(text1);
-						if(text1.contains("dev"))
-						s.add(text1);
-					}
-				});
-				urls.forEach(e -> {
-					if (e.startsWith("https")) {
-						int index = e.indexOf(".org");
-						String text1 = e.substring(0, index + 4);
-						//System.out.println(text1);
-						if(text1.contains(".org"))
-						s.add(text1);
-					}
-				});
-			}
-			response.setResults(s);
-			response.setInput(keyword);
-			
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
+		final RestTemplate restTemplate = new RestTemplate();
+		final String response2 = restTemplate.getForObject(URL, String.class);
 		
-		return response;
+
+		
+	//	Map jsonJavaRootObject = new Gson().fromJson(response2, Map.class);
+     //  Object array=jsonJavaRootObject.get("organic_results");
+//       
+     // JSONObject json = new JSONObject(response2);   
+//       
+//       // get locations array from the JSON Object and store it into JSONArray  
+//       JSONArray jsonArray = json.getJSONArray("organic_results");  
+//
+//		
+//       for (int i = 0; i < jsonArray.length(); i++) {  
+//           
+//           // store each object in JSONObject  
+//           JSONObject explrObject = jsonArray.getJSONObject(i);  
+//             
+//           // get field value from JSONObject using get() method  
+//           System.out.println(explrObject.get("title"));  
+//       }      
+//		List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
+//		try {
+//			Set<String> urls = new HashSet();
+//			Set<String> s = new HashSet();
+//			Document document1 = Jsoup.connect(URL).get();
+//			Document document = Jsoup.connect(URL).get();
+//			String html = document.html();
+//			Elements links = document.select("cite");
+//			
+////			System.out.println(document1.attr("title"));
+////			
+////			
+////			System.out.println();
+//			
+//			String title=null;
+//			for (Element l : links) {
+//				String text = l.text();
+//				title=  l.attr("title");
+//				String data=l.tagName();
+//				if (text.contains(",")) {
+//					text = text.replaceAll(" , ", "/");
+//
+//				}
+//				 //System.out.println("title= "+title);
+//					com.javatechie.es.api.model.Response response1 = new com.javatechie.es.api.model.Response();
+//				urls.add(text);
+//				
+//
+//				urls.forEach(e -> {
+//					if (e.startsWith("https")) {
+//						int index = e.indexOf(".com");
+//						String text1 = e.substring(0, index + 4);
+//						//System.out.println(text1);
+//						
+//						if(text1.contains(".com")) {
+//							String title1=text1.substring(8, index+4);
+//							if(!s.contains(text1)){
+//							response1.setUrl(text1);							
+//							response1.setTitle(title1);
+//							responseData.add(response1);
+//							}
+//						s.add(text1);
+//						
+//						}
+//					}
+//				});
+//				urls.forEach(e -> {
+//					if (e.startsWith("https")) {
+//						int index = e.indexOf(".dev");
+//						String text1 = e.substring(0, index + 4);
+//						//System.out.println(text1);
+//						if(text1.contains("dev"))
+//						s.add(text1);
+//					}
+//				});
+//				urls.forEach(e -> {
+//					if (e.startsWith("https")) {
+//						int index = e.indexOf(".org");
+//						String text1 = e.substring(0, index + 4);
+//						//System.out.println(text1);
+//						if(text1.contains(".org"))
+//						s.add(text1);
+//					}
+//				});
+//			}
+//			response.setResults(s);
+//			response.setInput(keyword);
+//			
+//
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		
+		return response2;
 
 	}
 
@@ -187,6 +241,26 @@ public class SpringBootElasticserachExampleApplication {
 		  
 		  
 		 // getPageLinks("https://google.com/search?q='angular'",0);
+		
+//		 final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+//
+//	        // Initialize the Scholar service
+//	        Scholar scholarService = new Scholar.Builder(HTTP_TRANSPORT)
+//	            .setApplicationName("YourApplicationName")
+//	            .setGoogleClientRequestInitializer(new ScholarRequestInitializer("YOUR_API_KEY"))
+//	            .build();
+//
+//	        // Perform a search
+//	        Scholar.ScholarlyArticleList articlesList = scholarService.articles()
+//	            .list("your search query")
+//	            .setMaxResults(10) // Adjust as needed
+//	            .execute();
+//
+//	        // Print the titles of the search results
+//	        List<ScholarlyArticle> articles = articlesList.getResults();
+//	        for (ScholarlyArticle article : articles) {
+//	            System.out.println(article.getTitle());
+//	        }
 
 		   
 	}
