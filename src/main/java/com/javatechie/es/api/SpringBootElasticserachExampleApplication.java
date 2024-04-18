@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.catalina.connector.Response;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,6 +31,7 @@ import com.javatechie.es.api.model.User;
 import com.javatechie.es.api.repository.CustomerRepository;
 import com.javatechie.es.api.repository.UserRepository;
 
+import jakarta.json.JsonObject;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
@@ -123,7 +125,7 @@ public class SpringBootElasticserachExampleApplication {
     }
 	 
 	@GetMapping("/search/{keyword}")
-	String getUrls(@PathVariable String keyword) throws IOException {
+	List<com.javatechie.es.api.model.Response> getUrls(@PathVariable String keyword) throws IOException {
 		// String URL="https://google.com/search" +"?q=" +keyword;
 		String en="en";
 		String key="139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0";
@@ -134,29 +136,34 @@ public class SpringBootElasticserachExampleApplication {
 		
 		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
 		
-		final RestTemplate restTemplate = new RestTemplate();
-		final String response2 = restTemplate.getForObject(URL, String.class);
+	final RestTemplate restTemplate = new RestTemplate();
+	final String response2 = restTemplate.getForObject(URL, String.class);
 		
-
+		JSONObject json = new JSONObject(response2); 
 		
-	//	Map jsonJavaRootObject = new Gson().fromJson(response2, Map.class);
-     //  Object array=jsonJavaRootObject.get("organic_results");
-//       
-     // JSONObject json = new JSONObject(response2);   
+//		Map jsonJavaRootObject = new Gson().fromJson(response2, Map.class);
+//		//JSONArray arr=jsonJavaRootObject.get("organic_results");
+////       
+//      JSONObject json = new JSONObject(response2);   
 //       
 //       // get locations array from the JSON Object and store it into JSONArray  
-//       JSONArray jsonArray = json.getJSONArray("organic_results");  
+       JSONArray jsonArray = json.getJSONArray("organic_results");  
 //
 //		
-//       for (int i = 0; i < jsonArray.length(); i++) {  
-//           
+       List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
+       for (int i = 0; i < jsonArray.length(); i++) {  
+          
 //           // store each object in JSONObject  
-//           JSONObject explrObject = jsonArray.getJSONObject(i);  
+           JSONObject explrObject = jsonArray.getJSONObject(i);  
 //             
-//           // get field value from JSONObject using get() method  
-//           System.out.println(explrObject.get("title"));  
-//       }      
-//		List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
+           // get field value from JSONObject using get() method  
+       	com.javatechie.es.api.model.Response response1= new com.javatechie.es.api.model.Response();
+       	response1.setTitle((String)explrObject.get("title"));
+       	response1.setUrl((String)explrObject.get("link"));
+       	responseData.add(response1);
+          System.out.println(explrObject.get("title"));  
+       }      
+		
 //		try {
 //			Set<String> urls = new HashSet();
 //			Set<String> s = new HashSet();
@@ -231,7 +238,7 @@ public class SpringBootElasticserachExampleApplication {
 //		}
 //		
 //		
-		return response2;
+		return responseData;
 
 	}
 
