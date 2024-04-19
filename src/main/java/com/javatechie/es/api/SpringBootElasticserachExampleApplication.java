@@ -136,17 +136,16 @@ public class SpringBootElasticserachExampleApplication {
 		
 		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
 		
+		String json1 = Jsoup.connect(URL).ignoreContentType(true).execute().body();
+		
+		System.out.println("json===="+json1);
+		
 	final RestTemplate restTemplate = new RestTemplate();
 	final String response2 = restTemplate.getForObject(URL, String.class);
 		
-		JSONObject json = new JSONObject(response2); 
+		JSONObject json = new JSONObject(json1); 
 		
-//		Map jsonJavaRootObject = new Gson().fromJson(response2, Map.class);
-//		//JSONArray arr=jsonJavaRootObject.get("organic_results");
-////       
-//      JSONObject json = new JSONObject(response2);   
-//       
-//       // get locations array from the JSON Object and store it into JSONArray  
+
        JSONArray jsonArray = json.getJSONArray("organic_results");  
 //
 //		
@@ -160,84 +159,12 @@ public class SpringBootElasticserachExampleApplication {
        	com.javatechie.es.api.model.Response response1= new com.javatechie.es.api.model.Response();
        	response1.setTitle((String)explrObject.get("title"));
        	response1.setUrl((String)explrObject.get("link"));
+       	response1.setSnippet((String)explrObject.get("snippet"));
        	responseData.add(response1);
           System.out.println(explrObject.get("title"));  
        }      
 		
-//		try {
-//			Set<String> urls = new HashSet();
-//			Set<String> s = new HashSet();
-//			Document document1 = Jsoup.connect(URL).get();
-//			Document document = Jsoup.connect(URL).get();
-//			String html = document.html();
-//			Elements links = document.select("cite");
-//			
-////			System.out.println(document1.attr("title"));
-////			
-////			
-////			System.out.println();
-//			
-//			String title=null;
-//			for (Element l : links) {
-//				String text = l.text();
-//				title=  l.attr("title");
-//				String data=l.tagName();
-//				if (text.contains(",")) {
-//					text = text.replaceAll(" , ", "/");
-//
-//				}
-//				 //System.out.println("title= "+title);
-//					com.javatechie.es.api.model.Response response1 = new com.javatechie.es.api.model.Response();
-//				urls.add(text);
-//				
-//
-//				urls.forEach(e -> {
-//					if (e.startsWith("https")) {
-//						int index = e.indexOf(".com");
-//						String text1 = e.substring(0, index + 4);
-//						//System.out.println(text1);
-//						
-//						if(text1.contains(".com")) {
-//							String title1=text1.substring(8, index+4);
-//							if(!s.contains(text1)){
-//							response1.setUrl(text1);							
-//							response1.setTitle(title1);
-//							responseData.add(response1);
-//							}
-//						s.add(text1);
-//						
-//						}
-//					}
-//				});
-//				urls.forEach(e -> {
-//					if (e.startsWith("https")) {
-//						int index = e.indexOf(".dev");
-//						String text1 = e.substring(0, index + 4);
-//						//System.out.println(text1);
-//						if(text1.contains("dev"))
-//						s.add(text1);
-//					}
-//				});
-//				urls.forEach(e -> {
-//					if (e.startsWith("https")) {
-//						int index = e.indexOf(".org");
-//						String text1 = e.substring(0, index + 4);
-//						//System.out.println(text1);
-//						if(text1.contains(".org"))
-//						s.add(text1);
-//					}
-//				});
-//			}
-//			response.setResults(s);
-//			response.setInput(keyword);
-//			
-//
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		
+
 		return responseData;
 
 	}
