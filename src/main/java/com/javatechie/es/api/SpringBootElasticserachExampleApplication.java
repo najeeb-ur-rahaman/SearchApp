@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import com.javatechie.es.api.model.Article;
+import com.javatechie.es.api.model.SearchRequest;
 import com.javatechie.es.api.model.User;
 import com.javatechie.es.api.repository.CustomerRepository;
 import com.javatechie.es.api.repository.UserRepository;
@@ -124,15 +125,23 @@ public class SpringBootElasticserachExampleApplication {
 	        }
     }
 	 
-	@GetMapping("/search/{keyword}")
-	List<com.javatechie.es.api.model.Response> getUrls(@PathVariable String keyword) throws IOException {
+	@PostMapping("/search")
+	List<com.javatechie.es.api.model.Response> getUrls(@RequestBody SearchRequest request) throws IOException {
 		// String URL="https://google.com/search" +"?q=" +keyword;
 		String en="en";
 		String key="139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0";
 		
 		//String URL = "https://scholar.google.com/scholar?hl={en}&api_key={key}&q={keyword}";
+		String date="2024";
+		String URL=null;
+		if(request.getDate1()!=null && !request.getDate1().isEmpty()) {
+			System.out.println(" date1 =================================="+request.getDate1());
 		
-		String URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +keyword;
+		 URL = "https://serpapi.com/search.json?h1=en&engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName() + "&as_ylo="+request.getDate1();
+				//+"&as_sdt=";
+		}else {
+			 URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName();
+		}
 		
 		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
 		
