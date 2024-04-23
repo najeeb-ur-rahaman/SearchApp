@@ -127,7 +127,7 @@ public class SpringBootElasticserachExampleApplication {
 	 
 	@PostMapping("/search")
 	List<com.javatechie.es.api.model.Response> getUrls(@RequestBody SearchRequest request) throws IOException {
-		// String URL="https://google.com/search" +"?q=" +keyword;
+		 String URL2="https://google.com/search" +"?q=" +"react";
 		String en="en";
 		String key="139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0";
 		
@@ -137,7 +137,7 @@ public class SpringBootElasticserachExampleApplication {
 		if(request.getDate1()!=null && !request.getDate1().isEmpty()) {
 			System.out.println(" date1 =================================="+request.getDate1());
 		
-		 URL = "https://serpapi.com/search.json?h1=en&engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName() + "&as_ylo="+request.getDate1();
+			URL = "https://serpapi.com/search.json?h1=en&engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName() + "&as_ylo="+request.getDate1();
 				//+"&as_sdt=";
 		}else {
 			 URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName();
@@ -147,15 +147,22 @@ public class SpringBootElasticserachExampleApplication {
 		
 		String json1 = Jsoup.connect(URL).ignoreContentType(true).execute().body();
 		
-		System.out.println("json===="+json1);
 		
-	final RestTemplate restTemplate = new RestTemplate();
-	final String response2 = restTemplate.getForObject(URL, String.class);
 		
-		JSONObject json = new JSONObject(json1); 
+		
+		
+		
+		
+		final RestTemplate restTemplate = new RestTemplate();
+		final String response2 = restTemplate.getForObject(URL, String.class);
+		
+		JSONObject sJson = new JSONObject(json1); 
+		
+		
 		
 
-       JSONArray jsonArray = json.getJSONArray("organic_results");  
+       JSONArray jsonArray = sJson.getJSONArray("organic_results"); 
+      // JSONArray jsonArray2 = gJson.getJSONArray("organic_results"); 
 //
 //		
        List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
@@ -170,9 +177,40 @@ public class SpringBootElasticserachExampleApplication {
        	response1.setUrl((String)explrObject.get("link"));
        	response1.setSnippet((String)explrObject.get("snippet"));
        	responseData.add(response1);
-          System.out.println(explrObject.get("title"));  
-       }      
+       	
+
 		
+		 
+       }   
+		if (request.getDate1() == null && request.getDate1().isEmpty()) {
+
+			String URL3 = "https://serpapi.com/search.json?engine=google&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"
+					+ "&q=" + request.getName();
+			String json2 = Jsoup.connect(URL3).ignoreContentType(true).execute().body();
+			JSONObject gJson = new JSONObject(json2);
+			JSONArray jsonArray2 = gJson.getJSONArray("organic_results"); 
+			for (int i = 0; i < jsonArray2.length(); i++) {
+
+//         // store each object in JSONObject  
+				if (i < 5) {
+					JSONObject explrObject = jsonArray2.getJSONObject(i);
+//           
+					// get field value from JSONObject using get() method
+					com.javatechie.es.api.model.Response response1 = new com.javatechie.es.api.model.Response();
+					response1.setTitle((String) explrObject.get("title"));
+					response1.setUrl((String) explrObject.get("link"));
+					response1.setSnippet((String) explrObject.get("snippet"));
+//				if(explrObject.get("favicon")!=null) {
+//				response1.setFavicon((String) explrObject.get("favicon"));
+//				}
+					responseData.add(response1);
+
+					System.out.println("jsonArray2=" + response1.getTitle());
+
+				}
+
+			}
+		}
 
 		return responseData;
 

@@ -14,6 +14,8 @@ public class Response {
 	
 	private String summary;
 	
+	private String favicon;
+	
 	private Set<String> results;
 	
 	public String getInput() {
@@ -51,6 +53,12 @@ public class Response {
 	}
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+	public String getFavicon() {
+		return favicon;
+	}
+	public void setFavicon(String favicon) {
+		this.favicon = favicon;
 	}
 	
 	
