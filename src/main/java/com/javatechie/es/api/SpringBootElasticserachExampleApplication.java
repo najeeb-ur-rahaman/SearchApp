@@ -165,20 +165,34 @@ public class SpringBootElasticserachExampleApplication {
       // JSONArray jsonArray2 = gJson.getJSONArray("organic_results"); 
 //
 //		
+       
+       System.out.println("json1="+json1);
        List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
        for (int i = 0; i < jsonArray.length(); i++) {  
           
 //           // store each object in JSONObject  
-           JSONObject explrObject = jsonArray.getJSONObject(i);  
+           JSONObject explrObject = jsonArray.getJSONObject(i); 
+           System.out.println("type="+request.getType());
 //             
            // get field value from JSONObject using get() method  
        	com.javatechie.es.api.model.Response response1= new com.javatechie.es.api.model.Response();
+       	if("B".equalsIgnoreCase(request.getType()) && explrObject.has("type")&& "book".equalsIgnoreCase((String)explrObject.get("type"))) {
        	response1.setTitle((String)explrObject.get("title"));
        	response1.setUrl((String)explrObject.get("link"));
        	response1.setSnippet((String)explrObject.get("snippet"));
+       	response1.setType((String)explrObject.get("type"));
        	responseData.add(response1);
-       	
-
+       	}else if("A".equalsIgnoreCase(request.getType())){
+       		response1.setTitle((String)explrObject.get("title"));
+           	response1.setUrl((String)explrObject.get("link"));
+           	response1.setSnippet((String)explrObject.get("snippet"));
+           	if((String)explrObject.get("type")!=null) {
+           	response1.setType((String)explrObject.get("type"));
+           	}else
+           		response1.setType("");
+           	responseData.add(response1);
+       	}
+   
 		
 		 
        }   

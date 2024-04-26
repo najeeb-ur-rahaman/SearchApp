@@ -16,6 +16,8 @@ public class Response {
 	
 	private String favicon;
 	
+	private String type;
+	
 	private Set<String> results;
 	
 	public String getInput() {
@@ -60,6 +62,14 @@ public class Response {
 	public void setFavicon(String favicon) {
 		this.favicon = favicon;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	
 	
 	
 	
