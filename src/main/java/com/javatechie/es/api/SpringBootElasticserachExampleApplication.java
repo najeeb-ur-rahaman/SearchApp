@@ -186,7 +186,17 @@ public class SpringBootElasticserachExampleApplication {
        		response1.setTitle((String)explrObject.get("title"));
            	response1.setUrl((String)explrObject.get("link"));
            	response1.setSnippet((String)explrObject.get("snippet"));
-           	if((String)explrObject.get("type")!=null) {
+           	if(explrObject.has("type") &&(String)explrObject.get("type")!=null) {
+           	response1.setType((String)explrObject.get("type"));
+           	}else
+           		response1.setType("");
+           	responseData.add(response1);
+       	}
+       	else if(!request.getDate1().isEmpty()){
+       		response1.setTitle((String)explrObject.get("title"));
+           	response1.setUrl((String)explrObject.get("link"));
+           	response1.setSnippet((String)explrObject.get("snippet"));
+           	if(explrObject.has("type") &&(String)explrObject.get("type")!=null) {
            	response1.setType((String)explrObject.get("type"));
            	}else
            		response1.setType("");
