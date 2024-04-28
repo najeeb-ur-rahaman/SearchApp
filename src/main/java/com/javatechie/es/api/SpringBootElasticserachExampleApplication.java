@@ -130,7 +130,8 @@ public class SpringBootElasticserachExampleApplication {
 		 String URL2="https://google.com/search" +"?q=" +"react";
 		String en="en";
 		String key="139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0";
-		
+		 List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
+		try {
 		//String URL = "https://scholar.google.com/scholar?hl={en}&api_key={key}&q={keyword}";
 		String date="2024";
 		String URL=null;
@@ -167,7 +168,7 @@ public class SpringBootElasticserachExampleApplication {
 //		
        
        System.out.println("json1="+json1);
-       List<com.javatechie.es.api.model.Response> responseData = new ArrayList();
+      
        for (int i = 0; i < jsonArray.length(); i++) {  
           
 //           // store each object in JSONObject  
@@ -235,9 +236,15 @@ public class SpringBootElasticserachExampleApplication {
 
 			}
 		}
+		}catch(Exception e) {
+		System.out.println("error occured while connecting");
+		{
+			
+		}
+		
 
+	}
 		return responseData;
-
 	}
 
 	public static void main(String[] args) {
