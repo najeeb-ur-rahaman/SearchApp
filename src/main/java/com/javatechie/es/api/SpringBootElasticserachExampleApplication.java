@@ -149,11 +149,6 @@ public class SpringBootElasticserachExampleApplication {
 		String json1 = Jsoup.connect(URL).ignoreContentType(true).execute().body();
 		
 		
-		
-		
-		
-		
-		
 		final RestTemplate restTemplate = new RestTemplate();
 		final String response2 = restTemplate.getForObject(URL, String.class);
 		
@@ -237,7 +232,7 @@ public class SpringBootElasticserachExampleApplication {
 			}
 		}
 		}catch(Exception e) {
-		System.out.println("error occured while connecting");
+		System.out.println("error occured while connecting====="+e.getMessage());
 		{
 			
 		}
