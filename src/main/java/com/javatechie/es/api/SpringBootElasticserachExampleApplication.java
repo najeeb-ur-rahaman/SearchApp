@@ -138,10 +138,10 @@ public class SpringBootElasticserachExampleApplication {
 		if(request.getDate1()!=null && !request.getDate1().isEmpty()) {
 			System.out.println(" date1 =================================="+request.getDate1());
 		
-			URL = "https://serpapi.com/search.json?h1=en&engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName() + "&as_ylo="+request.getDate1();
+			URL = "https://serpapi.com/search.json?h1=en&engine=google_scholar&api_key=34df2fc397e59c2602e3d64a6f889e922a5a853240d8f14e322dbfa961e00c78"+"&q=" +request.getName() + "&as_ylo="+request.getDate1();
 				//+"&as_sdt=";
 		}else {
-			 URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"+"&q=" +request.getName();
+			 URL = "https://serpapi.com/search.json?engine=google_scholar&api_key=34df2fc397e59c2602e3d64a6f889e922a5a853240d8f14e322dbfa961e00c78"+"&q=" +request.getName();
 		}
 		
 		com.javatechie.es.api.model.Response response= new com.javatechie.es.api.model.Response();
