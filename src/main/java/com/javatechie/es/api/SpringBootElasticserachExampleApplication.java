@@ -65,20 +65,25 @@ public class SpringBootElasticserachExampleApplication {
 	}
 
 	@PostMapping("/user")
-	public String loginUser(@RequestBody User user) {
+	public User loginUser(@RequestBody User user) {
 
 		User userObj = userRepository.findByUsername(user.getUsername());
 		if(userObj==null) {
-			return "User not Found";
+			User u2=new User();
+			u2.setMessage("User not Found");
+			return u2;
 		}
        System.out.println(userObj.getUsername());
 		if (user != null && !userObj.getUsername().equalsIgnoreCase(user.getUsername())) {
-			return "User not Found";
+			userObj.setMessage("User not Found");
+			return userObj;
 		} else if (!userObj.getPassword().equalsIgnoreCase(user.getPassword())) {
-			return "Password is incorrect";
-		}
+			userObj.setMessage("Password is incorrect");
+			return userObj;
+		}else
+			userObj.setMessage("success");
 
-		return "success";
+		return userObj;
 	}
     
     @Autowired
