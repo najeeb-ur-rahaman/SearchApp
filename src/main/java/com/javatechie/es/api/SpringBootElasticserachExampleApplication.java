@@ -29,10 +29,10 @@ import org.springframework.web.client.RestTemplate;
 import com.javatechie.es.api.model.Article;
 import com.javatechie.es.api.model.SearchRequest;
 import com.javatechie.es.api.model.User;
-import com.javatechie.es.api.repository.CustomerRepository;
+//import com.javatechie.es.api.repository.CustomerRepository;
 import com.javatechie.es.api.repository.UserRepository;
 
-import jakarta.json.JsonObject;
+//import jakarta.json.JsonObject;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
@@ -85,29 +85,7 @@ public class SpringBootElasticserachExampleApplication {
 
 		return userObj;
 	}
-    
-    @Autowired
-	private CustomerRepository repository;
-	
-	@PostMapping("/saveArticle")
-	public String saveCustomer(@RequestBody Article articles) {
-		System.out.println(articles.getTitle());
-		repository.save(articles);
-		return "saved";
-	}
 
-	@GetMapping("/findAll")
-	public Iterable<Article> findAllArticles() {
-		return repository.findAll();
-	}
-
-	@GetMapping("/searchByName/{title}")
-	public List<Article> findByFirstName(@PathVariable String title) {
-		System.out.println("title=" + title);
-		List<Article> articles = repository.findByTitle(title);
-		System.out.println(articles);
-		return articles;
-	}
 	
 	 public static void getPageLinks(String URL, int depth) {
 		 final int MAX_DEPTH = 2;
@@ -163,18 +141,15 @@ public class SpringBootElasticserachExampleApplication {
 		
 
        JSONArray jsonArray = sJson.getJSONArray("organic_results"); 
-      // JSONArray jsonArray2 = gJson.getJSONArray("organic_results"); 
-//
-//		
-       
+   
        System.out.println("json1="+json1);
       
        for (int i = 0; i < jsonArray.length(); i++) {  
           
-//           // store each object in JSONObject  
+           // store each object in JSONObject  
            JSONObject explrObject = jsonArray.getJSONObject(i); 
            System.out.println("type="+request.getType());
-//             
+            
            // get field value from JSONObject using get() method  
        	com.javatechie.es.api.model.Response response1= new com.javatechie.es.api.model.Response();
        	if("B".equalsIgnoreCase(request.getType()) && explrObject.has("type")&& "book".equalsIgnoreCase((String)explrObject.get("type"))) {
@@ -207,7 +182,7 @@ public class SpringBootElasticserachExampleApplication {
 		
 		 
        }   
-		if (request.getDate1() == null && request.getDate1().isEmpty()) {
+		
 
 			String URL3 = "https://serpapi.com/search.json?engine=google&api_key=139a42b86f32f4b9fd67a46b1cb319a94572b2c1d6f20b6d495ea1a41600b4e0"
 					+ "&q=" + request.getName();
@@ -225,9 +200,6 @@ public class SpringBootElasticserachExampleApplication {
 					response1.setTitle((String) explrObject.get("title"));
 					response1.setUrl((String) explrObject.get("link"));
 					response1.setSnippet((String) explrObject.get("snippet"));
-//				if(explrObject.get("favicon")!=null) {
-//				response1.setFavicon((String) explrObject.get("favicon"));
-//				}
 					responseData.add(response1);
 
 					System.out.println("jsonArray2=" + response1.getTitle());
@@ -235,7 +207,7 @@ public class SpringBootElasticserachExampleApplication {
 				}
 
 			}
-		}
+		
 		}catch(Exception e) {
 		System.out.println("error occured while connecting====="+e.getMessage());
 		{
