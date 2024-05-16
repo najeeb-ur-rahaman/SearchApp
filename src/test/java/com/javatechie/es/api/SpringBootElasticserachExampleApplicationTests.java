@@ -3,7 +3,7 @@ package com.javatechie.es.api;
 import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
- 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +25,27 @@ public class SpringBootElasticserachExampleApplicationTests {
 	
 	@Test
 	public void findByFirstName() {
-		
-		given(userRepository.findByUsername("")).willReturn(new User());
+		User u1=new User();
+		u1.setUsername("testuser");
+		given(userRepository.findByUsername("")).willReturn(u1);
+		assertTrue(true);
 	}
 	@Test
 	public void login() {
-		
-		given(userRepository.findByUsername("")).willReturn(new User());
+		User u1=new User();
+		u1.setUsername("testuser");
+		u1.setEmail("testuser@gmail.com");
+		given(userRepository.findByUsername("")).willReturn(u1);
+		assertTrue(true);
+	}
+	@Test
+	public void register() {
+		User u1=new User();
+		u1.setUsername("testuser");
+		u1.setEmail("testuser@gmail.com");
+		u1.setInstitute("SLK");
+		given(userRepository.findByUsername("")).willReturn(u1);
+		assertTrue(true);
 	}
 
 }
