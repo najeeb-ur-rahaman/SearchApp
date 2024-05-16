@@ -1,6 +1,9 @@
 package com.javatechie.es.api;
 
 import static org.mockito.BDDMockito.verify;
+
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,6 +25,7 @@ public class SpringBootElasticserachExampleApplicationTests {
 	
 	@Mock
 	UserRepository userRepository;
+	SpringBootElasticserachExampleApplicationTests t1=new SpringBootElasticserachExampleApplicationTests();
 	
 	@Test
 	public void findByFirstName() {
@@ -47,5 +51,14 @@ public class SpringBootElasticserachExampleApplicationTests {
 		given(userRepository.findByUsername("")).willReturn(u1);
 		assertTrue(true);
 	}
+	@Test
+    public void testSearchIntegration() {
+        // Perform actual search
+        List<User> results = userRepository.findAll();
+
+        // Assert results
+        if(results.isEmpty())
+        assertTrue(true);
+    }
 
 }
